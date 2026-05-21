@@ -70,6 +70,11 @@ log "Downloading docker-compose.prod.yml from ${ARTIFACT_BASE_URL}/docker-compos
 curl -fsSL -L $ARTIFACT_BASE_URL/docker-compose.prod.yml -o /data/coolify/source/docker-compose.prod.yml
 log "Downloading .env.production from ${ARTIFACT_BASE_URL}/.env.production"
 curl -fsSL -L $ARTIFACT_BASE_URL/.env.production -o /data/coolify/source/.env.production
+log "Downloading restore-coolify-instance.sh from ${ARTIFACT_BASE_URL}/restore-coolify-instance.sh"
+curl -fsSL -L $ARTIFACT_BASE_URL/restore-coolify-instance.sh -o /data/coolify/source/restore-coolify-instance.sh
+mkdir -p /data/coolify/bin
+install -m 700 /data/coolify/source/restore-coolify-instance.sh /data/coolify/bin/restore-coolify-instance.sh
+log "Installed restore script to /data/coolify/bin/restore-coolify-instance.sh"
 log "Configuration files downloaded successfully"
 echo "     Done."
 
