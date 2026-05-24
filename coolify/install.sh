@@ -810,10 +810,12 @@ curl -fsSL -L $ARTIFACT_BASE_URL/.env.production -o /data/coolify/source/.env.pr
 PID3=$!
 curl -fsSL -L $ARTIFACT_BASE_URL/upgrade.sh -o /data/coolify/source/upgrade.sh &
 PID4=$!
+curl -fsSL -L $ARTIFACT_BASE_URL/restore-coolify-instance.sh -o /data/coolify/source/restore-coolify-instance.sh &
+PID5=$!
 
 # Wait for all downloads to complete and check for errors
 DOWNLOAD_FAILED=false
-for PID in $PID1 $PID2 $PID3 $PID4; do
+for PID in $PID1 $PID2 $PID3 $PID4 $PID5; do
     if ! wait $PID; then
         DOWNLOAD_FAILED=true
     fi
@@ -823,6 +825,10 @@ if [ "$DOWNLOAD_FAILED" = true ]; then
     echo " - ERROR: One or more downloads failed. Please check your network connection."
     exit 1
 fi
+
+mkdir -p /data/coolify/bin
+install -m 700 /data/coolify/source/restore-coolify-instance.sh /data/coolify/bin/restore-coolify-instance.sh
+log "Installed restore script to /data/coolify/bin/restore-coolify-instance.sh"
 
 log "All configuration files downloaded successfully"
 echo "     Done."
